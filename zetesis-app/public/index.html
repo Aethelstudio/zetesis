@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zetesis — a research atlas for philosophy</title>
+<meta name="description" content="Zetesis helps philosophy students find texts, thinkers and scholarship on any topic.">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ec;--fg:#1d1b18;--mut:#6b655c;--line:#ddd6c8;--card:#fbf9f4;--ac:#8a3b2a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15130f;--fg:#ece6d9;--mut:#a39b8c;--line:#2e2a23;--card:#1c1914;--ac:#d98a6f}}
+:root[data-theme="dark"]{--bg:#15130f;--fg:#ece6d9;--mut:#a39b8c;--line:#2e2a23;--card:#1c1914;--ac:#d98a6f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Newsreader,Georgia,serif}
+.w{max-width:920px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+header .w{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.logo{font-size:24px;font-weight:600;letter-spacing:.01em;cursor:pointer}
+.logo small{font:12px Inter,sans-serif;color:var(--mut);margin-left:8px;letter-spacing:.08em}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+button,.btn{font:500 13px Inter,system-ui,sans-serif;background:none;border:1px solid transparent;color:var(--mut);padding:6px 10px;border-radius:6px;cursor:pointer;text-decoration:none}
+nav button.on,button:hover,.btn:hover{color:var(--fg);border-color:var(--line)}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.15;font-weight:400;margin:46px 0 12px}
+h1 em{color:var(--ac)}
+h2{font-size:26px;font-weight:600;margin:40px 0 8px}
+h3{font:500 12px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:30px 0 10px}
+p{margin:0 0 12px}.mut{color:var(--mut)}
+a{color:var(--ac)}
+.sf{display:flex;gap:8px;margin:22px 0 10px}
+input{flex:1;font:17px Newsreader,serif;padding:12px 14px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;min-width:0}
+.go{background:var(--fg);color:var(--bg);padding:8px 18px}
+textarea,select{font:16px Newsreader,serif;padding:10px 12px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;width:100%}select{width:auto}
+.f input,.f select{margin-bottom:8px;width:100%}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{border-color:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card b{font-weight:600}
+.tag{font:11px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
+.card p{font-size:15px;margin:4px 0 8px}
+.hub{cursor:pointer}.hub:hover{border-color:var(--ac)}
+.fig{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin:12px 0}
+.fig svg{width:100%;height:auto;display:block}
+.fig text{font-family:Inter,sans-serif;fill:var(--fg)}
+.sc{overflow-x:auto}
+table{border-collapse:collapse;min-width:640px;font-size:14.5px;font-family:Inter,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:500}
+.row{display:flex;gap:10px;align-items:baseline;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.row span{font-size:15px}
+footer{border-top:1px solid var(--line);margin-top:60px;padding:20px 0;font:13px Inter,sans-serif;color:var(--mut)}
+.note{border-left:3px solid var(--ac);padding:2px 14px;color:var(--mut);font-size:15px;margin:14px 0}
+.v{display:none}.v.on{display:block}
+</style></head><body>
+<header><div class="w"><div class="logo" data-v="home">Zetesis<small>ζήτησις · INQUIRY</small></div>
+<nav><button data-v="home" class="on">Search</button><button data-v="rousseau">Hub: Rousseau</button><button data-v="atlas">Thinker map</button><button data-v="list">Reading list <span id="n"></span></button><button data-v="arg">Arguments</button><button data-v="ai">Assistant</button><button data-v="notes">Notes</button><button data-v="cite">Citations</button><button data-v="access">Library access</button><button data-v="acct">Account</button><button id="th" title="Theme">◐</button></nav></div></header>
+<main class="w">
+
+<section id="home" class="v on">
+<h1>Find what has been <em>written</em>, and who is in the conversation.</h1>
+<p class="mut">A research atlas for philosophy students. Enter any topic to search the major sources at once, or open a curated topic hub.</p>
+<form class="sf" id="sf"><input id="q" placeholder="e.g. moral conscience, indeterminacy of translation, theodicy" autocomplete="off"><button class="go" type="submit">Search</button></form>
+<div class="chips" id="chips"></div>
+<div id="res"></div>
+<h3>Topic hubs</h3>
+<div class="grid" id="hubs"></div>
+</section>
+
+<section id="rousseau" class="v">
+<h3>Topic hub · Political philosophy</h3>
+<h2 style="margin-top:0">Rousseau's state of nature: history or thought experiment?</h2>
+<p>In the <i>Discourse on Inequality</i> (1755), Rousseau describes humans before society. The question is what kind of claim that description is: a report about the actual past, or a reasoned device for separating what is natural in us from what society adds.</p>
+<h3>Where interpretations sit</h3>
+<div class="fig"><svg viewBox="0 0 700 170" role="img" aria-label="Spectrum from hypothetical to historical readings">
+<line x1="40" y1="80" x2="660" y2="80" stroke="var(--line)" stroke-width="3"/>
+<text x="40" y="30" font-size="13" style="fill:var(--mut)">HYPOTHETICAL THOUGHT EXPERIMENT</text>
+<text x="660" y="30" font-size="13" text-anchor="end" style="fill:var(--mut)">HISTORICAL CLAIM</text>
+<g fill="var(--ac)"><circle cx="110" cy="80" r="7"/><circle cx="350" cy="80" r="7"/><circle cx="590" cy="80" r="7"/></g>
+<text x="110" y="112" font-size="13" text-anchor="middle">Method reading</text><text x="110" y="130" font-size="11.5" text-anchor="middle" style="fill:var(--mut)">Rousseau's own framing</text>
+<text x="350" y="112" font-size="13" text-anchor="middle">Conjectural history</text><text x="350" y="130" font-size="11.5" text-anchor="middle" style="fill:var(--mut)">probable reconstruction</text>
+<text x="590" y="112" font-size="13" text-anchor="middle">Anthropological reading</text><text x="590" y="130" font-size="11.5" text-anchor="middle" style="fill:var(--mut)">travel reports as evidence</text></svg></div>
+<div class="grid">
+<div class="card"><span class="tag">Hypothetical</span><p>Rousseau signals that his account is conditional reasoning, not a record of events. The state of nature isolates natural traits (self-preservation, pity) from acquired ones.</p></div>
+<div class="card"><span class="tag">Historical</span><p>He draws on travellers' accounts of non-European peoples and narrates stages of development, which invites reading it as a claim about real early humans.</p></div>
+<div class="card"><span class="tag">Conjectural history</span><p>A middle path: a plausible reconstruction of how things could have unfolded, valued for explanatory force rather than documentary proof.</p></div></div>
+<h3>The tradition he answers</h3>
+<div class="fig"><svg id="tl" viewBox="0 0 700 150" role="img" aria-label="Timeline of social contract thinkers"></svg></div>
+<div class="sc"><table><tr><th></th><th>Hobbes</th><th>Locke</th><th>Rousseau</th></tr>
+<tr><th>Human nature</th><td>Self-preserving, competitive, fearful</td><td>Bound by reason and natural law</td><td>Self-love and pity; few needs</td></tr>
+<tr><th>Natural condition</th><td>Insecurity; war of all against all</td><td>Mostly peaceable but with insecure judgement</td><td>Solitary, peaceful, largely amoral</td></tr>
+<tr><th>Why leave it</th><td>To gain security</td><td>To protect property with an impartial judge</td><td>Inequality and dependence grow through social development</td></tr>
+<tr><th>Status of the claim</th><td>Mainly analytic, with historical illustrations</td><td>Mixed: logic plus appeals to early societies</td><td>Contested: the very question of this hub</td></tr></table></div>
+<h3>Reading starting points</h3>
+<p class="note">Check each entry against PhilPapers or your supervisor's list before citing. Dates and editions vary.</p>
+<div id="rl"></div>
+<h3>Overviews</h3>
+<p><a href="https://plato.stanford.edu/entries/rousseau/" target="_blank" rel="noopener">Stanford Encyclopedia: Rousseau</a> · <a href="https://iep.utm.edu/rousseau/" target="_blank" rel="noopener">Internet Encyclopedia: Rousseau</a></p>
+</section>
+
+<section id="list" class="v"><h2 style="margin-top:34px">Reading list</h2>
+<p class="mut">Saved in this browser only. Click a status to cycle it.</p><div id="ll"></div>
+<p><button id="cp">Copy as text</button></p></section>
+
+<section id="access" class="v"><h2 style="margin-top:34px">Library access via EKSU</h2>
+<p>Many journals are paywalled. The Ekiti State University e-library lists the databases below. Use them from the university network where required.</p>
+<div class="grid" id="ak"></div>
+<p class="note">Zetesis never stores library logins. Use the credentials your library gives you, directly on their sites.</p>
+<p><a class="btn" style="border-color:var(--line)" href="https://eksu.edu.ng/e-library-resources/" target="_blank" rel="noopener">Open the EKSU e-library page</a></p></section>
+<section id="atlas" class="v"><h2 style="margin-top:34px">Thinker map</h2>
+<p class="mut">Select a thinker. Lines show influence or sustained engagement, not every connection. This is a simplified starter map covering political, language, and religion/existence debates.</p>
+<div class="fig"><svg viewBox="0 0 760 375" role="img" aria-label="Map of philosophers by period and tradition">
+<text x="10" y="22" font-size="10" letter-spacing="1.5" style="fill:var(--mut)">POLITICAL &amp; MORAL</text>
+<text x="430" y="115" font-size="10" letter-spacing="1.5" style="fill:var(--mut)">LANGUAGE &amp; MEANING</text>
+<text x="10" y="268" font-size="10" letter-spacing="1.5" style="fill:var(--mut)">RELIGION &amp; EXISTENCE</text>
+<g style="stroke:var(--line)"><line x1="182" y1="356" x2="182" y2="362"/><line x1="372" y1="356" x2="372" y2="362"/><line x1="562" y1="356" x2="562" y2="362"/><line x1="752" y1="356" x2="752" y2="362"/></g>
+<text x="182" y="373" font-size="10" text-anchor="middle" style="fill:var(--mut)">1700</text><text x="372" y="373" font-size="10" text-anchor="middle" style="fill:var(--mut)">1800</text><text x="562" y="373" font-size="10" text-anchor="middle" style="fill:var(--mut)">1900</text><text x="744" y="373" font-size="10" text-anchor="middle" style="fill:var(--mut)">2000</text>
+<g id="ag"></g></svg></div>
+<div id="ad"><p class="mut">No thinker selected yet.</p></div></section>
+
+<section id="arg" class="v"><h2 style="margin-top:34px">Argument builder</h2>
+<p class="mut">Lay out your thesis, the premises that support it, and the objections you must answer. Saved in this browser only.</p>
+<h3>Thesis</h3><textarea id="at" rows="2" placeholder="e.g. Rousseau's state of nature is best read as a hypothetical device, not a historical claim."></textarea>
+<div id="asm" style="margin-top:10px"></div>
+<h3>Premises</h3><div id="ap"></div><p><button class="go" id="aap">+ Add premise</button></p>
+<h3>Therefore</h3><div class="card"><b>Your thesis</b><br><span class="mut">Objections to the thesis itself:</span><div id="ao"></div></div>
+<p style="margin-top:16px"><button id="aco">Copy outline</button><button id="ask">Copy essay skeleton</button><button id="acl">Clear</button></p></section>
+
+<section id="acct" class="v"><h2 style="margin-top:34px">Account</h2><p class="mut" id="am"></p>
+<div class="card f" id="af"><input id="au" placeholder="Username" autocomplete="username"><input id="aw" type="password" placeholder="Password (8+ characters)" autocomplete="current-password"><p style="margin:0"><button class="go" id="ali">Sign in</button><button id="asu">Create account</button></p></div>
+<p><button id="alo" style="display:none">Sign out</button></p><p class="note">There is no password reset. Keep a copy of your outline and notes.</p></section>
+
+<section id="ai" class="v"><h2 style="margin-top:34px">Research assistant</h2>
+<p class="mut">Works only from text you paste. It will not supply citations or quotations: find those in your library databases. Check everything it says.</p>
+<div class="card f"><select id="ak2"><option value="explain">Explain a passage</option><option value="objections">Suggest objections to my argument</option><option value="premises">Check my premises</option><option value="summarize">Summarize a text</option></select><textarea id="ax" rows="8" placeholder="Paste a passage, or use your argument"></textarea><p style="margin:8px 0 0"><button class="go" id="ar">Ask</button><button id="aa">Use my argument</button></p></div>
+<div id="aout" class="card" style="margin-top:12px;display:none;white-space:pre-wrap"></div></section>
+
+<section id="notes" class="v"><h2 style="margin-top:34px">Notes</h2>
+<p class="mut">Quotes, ideas and objections with page numbers. Saved in this browser only.</p>
+<div class="card f"><input id="ns" list="sl" placeholder="Source (pick from your reading list or type)"><datalist id="sl"></datalist><input id="np" placeholder="Page"><select id="nk"><option>Quote</option><option>Idea</option><option>Objection</option></select><textarea id="nt" rows="3" placeholder="Your note, or the exact quote" style="margin-top:8px"></textarea><p style="margin:8px 0 0"><button class="go" id="na">Save note</button></p></div>
+<div id="nl"></div><p><button id="nc">Copy all notes</button></p></section>
+
+<section id="cite" class="v"><h2 style="margin-top:34px">Citation generator</h2>
+<p class="mut">Authors as “Last, First”, separated by semicolons. Results update as you type.</p>
+<div class="card f" id="cf"><select id="ct"><option value="b">Book</option><option value="a">Journal article</option></select><input id="ca" placeholder="Rousseau, Jean-Jacques"><input id="cy" placeholder="Year"><input id="ctl" placeholder="Title"><input id="cs" placeholder="Publisher (book) or journal name (article)"><input id="cp" placeholder="Pages (articles), e.g. 12-30"><input id="cu" placeholder="URL or DOI (optional)"></div>
+<div id="co"></div></section>
+</main>
+<footer><div class="w">Zetesis · A project by Aethel Studio · Phase 2b</div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const E=encodeURIComponent;
+const SRC=[
+["PhilPapers","Index","The largest index of philosophy papers.",q=>"https://philpapers.org/s/"+q],
+["Stanford Encyclopedia","Overview","Authoritative entries with bibliographies.",q=>"https://plato.stanford.edu/search/searcher.py?query="+q],
+["Internet Encyclopedia","Overview","Accessible, peer-reviewed entries.",q=>"https://iep.utm.edu/?s="+q],
+["Google Scholar","Papers","Wide search; follow citations onward.",q=>"https://scholar.google.com/scholar?q="+q],
+["Semantic Scholar","Papers","Related papers and citation context.",q=>"https://www.semanticscholar.org/search?q="+q],
+["Project Gutenberg","Free texts","Public-domain primary texts.",q=>"https://www.gutenberg.org/ebooks/search/?query="+q],
+["Internet Archive","Books","Scans of editions and older scholarship.",q=>"https://archive.org/search?query="+q],
+["JSTOR","EKSU network","Journals and books; on the EKSU network only.",q=>"https://www.jstor.org/action/doBasicSearch?Query="+q],
+["AJOL","African journals","African-based scholarship (free registration).",q=>"https://www.ajol.info/index.php/index/search/search?query="+q]];
+const TOPICS=["Moral conscience","Indeterminacy of translation","Theodicy","Social contract","Existentialism and freedom"];
+const ACC=[["JSTOR","Humanities journals and books. EKSU network only."],["EBSCO","Broad academic databases. Credentials from the library page."],["AJOL","African journals online. Free registration."],["DOAJ","Directory of open-access journals."],["The Free Library","Classic texts and periodicals."]];
+const RL=[["Discourse on the Origin and Foundations of Inequality","Rousseau","1755","Primary"],["The Social Contract","Rousseau","1762","Primary"],["Leviathan","Hobbes","1651","Primary"],["Second Treatise of Government","Locke","1689","Primary"],["The Supposed Primitivism of Rousseau's Discourse on Inequality","A. O. Lovejoy","1923","Secondary"],["The Natural Goodness of Man","Arthur Melzer","1990","Secondary"],["Rousseau's Theodicy of Self-Love","Frederick Neuhouser","2008","Secondary"],["Transparency and Obstruction","Jean Starobinski","1957","Secondary"]];
+let L=[];try{L=JSON.parse(localStorage.getItem("zl")||"[]")}catch(e){}
+const save=()=>{try{localStorage.setItem("zl",JSON.stringify(L))}catch(e){}$("#n").textContent=L.length?"("+L.length+")":""};
+const ST=["to read","reading","done"];
+function view(v){$$(".v").forEach(x=>x.classList.toggle("on",x.id==v));$$("nav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v==v));scrollTo(0,0)}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-v]");if(t)view(t.dataset.v);
+const a=e.target.closest("[data-add]");if(a){const r=RL[a.dataset.add];if(!L.some(x=>x.t==r[0])){L.push({t:r[0],a:r[1],y:r[2],s:0});save()}a.textContent="Added";}
+const s=e.target.closest("[data-st]");if(s){L[s.dataset.st].s=(L[s.dataset.st].s+1)%3;save();list()}
+const d=e.target.closest("[data-rm]");if(d){L.splice(d.dataset.rm,1);save();list()}
+const h=e.target.closest("[data-q]");if(h){$("#q").value=h.dataset.q;search(h.dataset.q)}});
+function search(q){q=q.trim();if(!q)return;const x=E(q);
+let h=/rousseau|state of nature/i.test(q)?`<div class="note">A curated hub exists for this: <a href="#" data-v="rousseau">Rousseau's state of nature</a>.</div>`:"";
+h+=`<h3>Sources for “${q.replace(/</g,"&lt;")}”</h3><div class="grid">`+SRC.map(s=>`<div class="card"><span class="tag">${s[1]}</span><br><b>${s[0]}</b><p>${s[2]}</p><a href="${s[3](x)}" target="_blank" rel="noopener">Search →</a></div>`).join("")+"</div>";
+$("#res").innerHTML=h;live(q)}
+$("#sf").onsubmit=e=>{e.preventDefault();search($("#q").value)};
+$("#chips").innerHTML=TOPICS.map(t=>`<button data-q="${t}">${t}</button>`).join("");
+$("#hubs").innerHTML=`<div class="card hub" data-v="rousseau"><span class="tag">Live hub</span><br><b>Rousseau's state of nature</b><p>History or thought experiment? Positions, tradition, readings.</p></div>`+TOPICS.slice(0,3).map(t=>`<div class="card hub" data-q="${t}"><span class="tag">Coming soon</span><br><b>${t}</b><p>Search the sources now.</p></div>`).join("");
+$("#rl").innerHTML=RL.map((r,i)=>`<div class="row"><span><b>${r[0]}</b><br><span class="mut">${r[1]}, ${r[2]} · ${r[3]} · <a href="https://philpapers.org/s/${E(r[0])}" target="_blank" rel="noopener">find</a></span></span><button data-add="${i}">Add</button></div>`).join("");
+$("#ak").innerHTML=ACC.map(a=>`<div class="card"><b>${a[0]}</b><p>${a[1]}</p></div>`).join("");
+function list(){$("#ll").innerHTML=L.length?L.map((r,i)=>`<div class="row"><span><b>${r.t}</b><br><span class="mut">${esc(r.a)}, ${r.y}${r.u?` · <a href="${r.u}" target="_blank" rel="noopener">open</a>`:""}</span></span><span><button data-st="${i}">${ST[r.s]}</button><button data-rm="${i}">✕</button></span></div>`).join(""):'<p class="mut">Nothing saved yet. Add items from a hub.</p>'}
+const T=[[1625,"Grotius"],[1651,"Hobbes"],[1672,"Pufendorf"],[1689,"Locke"],[1755,"Rousseau",1],[1784,"Kant"],[1971,"Rawls"],[1974,"Nozick"]];
+$("#tl").innerHTML='<line x1="30" y1="75" x2="670" y2="75" stroke="var(--line)" stroke-width="3"/>'+T.map((t,i)=>{const x=30+(t[0]-1600)*1.6,u=i%2,y=u?108:50;return `<circle cx="${x}" cy="75" r="${t[2]?8:5}" fill="${t[2]?"var(--ac)":"var(--mut)"}"/><text x="${x}" y="${y}" font-size="12.5" text-anchor="middle" ${t[2]?'font-weight="600"':""}>${t[1]}</text><text x="${x}" y="${y+14}" font-size="10.5" text-anchor="middle" style="fill:var(--mut)">${t[0]}</text>`}).join("");
+$("#th").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue("--bg").trim()=="#15130f";r.dataset.theme=d?"light":"dark"};
+$("#cp").onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(L.map(r=>`${r.a} (${r.y}). ${r.t}. [${ST[r.s]}]`).join("\n"));
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const inv=n=>{const p=n.trim().split(/\s+/);return p.length>1?p[p.length-1]+", "+p.slice(0,-1).join(" "):n};
+let LR=[];
+async function live(q){const el=document.createElement("div");el.innerHTML='<h3>Live results</h3><div id="lv" class="mut">Searching…</div>';$("#res").prepend(el);
+try{const x=E(q);
+const [a,b]=await Promise.all([fetch("https://api.openalex.org/works?search="+x+"&per-page=8&select=title,publication_year,authorships,doi,primary_location").then(r=>r.json()),fetch("https://openlibrary.org/search.json?q="+x+"&limit=6&fields=title,author_name,first_publish_year,key").then(r=>r.json())]);
+LR=[...(a.results||[]).map(w=>({t:w.title,a:(w.authorships||[]).slice(0,3).map(z=>z.author.display_name).join("; "),y:w.publication_year,s:(w.primary_location&&w.primary_location.source&&w.primary_location.source.display_name)||"",u:w.doi||"",k:"a"})),...(b.docs||[]).map(d=>({t:d.title,a:(d.author_name||[]).slice(0,3).join("; "),y:d.first_publish_year,s:"",u:"https://openlibrary.org"+d.key,k:"b"}))].filter(r=>r.t);
+$("#lv").outerHTML=LR.length?LR.map((r,i)=>`<div class="row"><span><b>${esc(r.t)}</b><br><span class="mut">${esc(r.a)} · ${r.y||"n.d."} · ${r.k=="a"?"Article":"Book"}${r.u?` · <a href="${r.u}" target="_blank" rel="noopener">open</a>`:""}</span></span><span><button data-addl="${i}">Add</button><button data-citel="${i}">Cite</button></span></div>`).join(""):'<p class="mut">No live results.</p>'}
+catch(e){$("#lv").textContent="Live results are unavailable on this host. Deploy Zetesis to your own domain to enable them; the source links below still work."}}
+function cite(){const g=i=>$(i).value.trim(),b=g("#ct")=="b",au=g("#ca").split(";").map(s=>s.trim()).filter(Boolean).map(s=>s.split(",").map(z=>esc(z.trim()))),y=esc(g("#cy"))||"n.d.",t=esc(g("#ctl")),s=esc(g("#cs")),p=esc(g("#cp")),u=g("#cu")?" "+esc(g("#cu")):"";
+if(!au.length||!t){$("#co").innerHTML='<p class="mut">Enter at least an author and a title.</p>';return}
+const ini=f=>(f||"").split(/[\s-]+/).filter(Boolean).map(w=>w[0].toUpperCase()+".").join(" "),n=au.length,I=a=>a[0]+(a[1]?", "+a[1]:""),NF=a=>(a[1]?a[1]+" ":"")+a[0],AI=a=>a[0]+(a[1]?", "+ini(a[1]):""),j=(r,sep)=>r.length>1?r.slice(0,-1).join(", ")+sep+r[r.length-1]:r[0];
+const ap=j(au.map(AI),", &amp; "),ha=j(au.map(AI)," and "),ml=n>2?I(au[0])+", et al.":n==2?I(au[0])+", and "+NF(au[1]):I(au[0]),ch=j([I(au[0]),...au.slice(1).map(NF)],", and ");
+const O=[["APA",b?`${ap} (${y}). <i>${t}</i>. ${s}.`:`${ap} (${y}). ${t}. <i>${s}</i>${p?", "+p:""}.`],["MLA",b?`${ml}. <i>${t}</i>. ${s}, ${y}.`:`${ml}. “${t}.” <i>${s}</i>, ${y}${p?", pp. "+p:""}.`],["Chicago",b?`${ch}. <i>${t}</i>. ${s}, ${y}.`:`${ch}. “${t}.” <i>${s}</i> (${y})${p?": "+p:""}.`],["Harvard",b?`${ha} (${y}) <i>${t}</i>. ${s}.`:`${ha} (${y}) ‘${t}’, <i>${s}</i>${p?", pp. "+p:""}.`]];
+$("#co").innerHTML=O.map(o=>`<div class="card" style="margin-top:10px"><span class="tag">${o[0]}</span><p class="o">${o[1].replace(/\.\s*,\s*/g,". ").replace(/\.\s*\./g,".")+u}</p><button data-cc>Copy</button></div>`).join("")+'<p class="note">Check against your department\'s style guide; formats vary by edition.</p>'}
+$("#cf").addEventListener("input",cite);
+let N=[];try{N=JSON.parse(localStorage.getItem("zn")||"[]")}catch(e){}
+const sn=()=>{try{localStorage.setItem("zn",JSON.stringify(N))}catch(e){}};
+function notes(){$("#sl").innerHTML=L.map(r=>`<option value="${esc(r.t)}">`).join("");$("#nl").innerHTML=N.length?N.map((r,i)=>`<div class="row"><span><span class="tag">${r.k}</span> <span class="mut">${esc(r.s)}${r.p?", p. "+esc(r.p):""}</span><br>${esc(r.x)}</span><button data-nd="${i}">✕</button></div>`).join(""):'<p class="mut">No notes yet.</p>'}
+$("#na").onclick=()=>{const x=$("#nt").value.trim();if(!x)return;N.unshift({s:$("#ns").value.trim(),p:$("#np").value.trim(),k:$("#nk").value,x});sn();$("#nt").value="";notes()};
+$("#nc").onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(N.map(r=>`[${r.k}] ${r.s}${r.p?", p. "+r.p:""}: ${r.x}`).join("\n\n"));
+document.addEventListener("click",e=>{const a=e.target.closest("[data-addl]");if(a){const r=LR[a.dataset.addl];if(!L.some(x=>x.t==r.t)){L.push({t:r.t,a:r.a,y:r.y||"n.d.",s:0,u:r.u});save()}a.textContent="Added"}
+const c=e.target.closest("[data-citel]");if(c){const r=LR[c.dataset.citel];$("#ct").value=r.k;$("#ca").value=r.a.split("; ").map(inv).join("; ");$("#cy").value=r.y||"";$("#ctl").value=r.t;$("#cs").value=r.s;$("#cu").value=r.u;view("cite");cite()}
+const d=e.target.closest("[data-nd]");if(d){N.splice(d.dataset.nd,1);sn();notes()}
+const k=e.target.closest("[data-cc]");if(k&&navigator.clipboard)navigator.clipboard.writeText(k.parentElement.querySelector(".o").innerText);
+if(e.target.closest('[data-v="notes"]'))notes()});
+const G={
+hobbes:["Hobbes","1588–1679",89,60,"Leviathan (1651)","Describes a natural condition of insecurity and argues authority is justified by the need for peace.",1],
+locke:["Locke","1632–1704",161,100,"Two Treatises of Government (1689)","Grounds government in consent and natural rights, with property central.",1],
+rousseau:["Rousseau","1712–1778",286,60,"Discourse on Inequality (1755); The Social Contract (1762)","Traces how social development generates inequality, using a state of nature whose status is the subject of your hub.",1],
+kant:["Kant","1724–1804",349,100,"Groundwork of the Metaphysics of Morals (1785)","Ties morality and political legitimacy to autonomy and reason.",1],
+rawls:["Rawls","1921–2002",680,50,"A Theory of Justice (1971)","Uses a hypothetical original position to test principles of justice.",1],
+nozick:["Nozick","1938–2002",705,115,"Anarchy, State, and Utopia (1974)","Defends a minimal state, answering Rawls from a rights-based starting point.",1],
+frege:["Frege","1848–1925",500,185,"On Sense and Reference (1892)","Distinguishes sense from reference, founding modern philosophy of language."],
+wittgenstein:["Wittgenstein","1889–1951",575,145,"Tractatus (1921); Philosophical Investigations (1953)","Moves from a picture theory of meaning to meaning as use."],
+carnap:["Carnap","1891–1970",575,225,"Der logische Aufbau der Welt (1928)","Leading logical empiricist, building language frameworks."],
+quine:["Quine","1908–2000",650,185,"Two Dogmas of Empiricism (1951); Word and Object (1960)","Argues for the indeterminacy of translation and attacks the analytic/synthetic distinction."],
+davidson:["Davidson","1917–2003",715,185,"Truth and Meaning (1967)","Builds a theory of meaning on truth conditions and radical interpretation."],
+pascal:["Pascal","1623–1662",130,300,"Pensées (published 1670)","Treats faith under uncertainty, famous for the wager."],
+kierkegaard:["Kierkegaard","1813–1855",450,295,"Fear and Trembling (1843)","Makes individual existence and faith the centre of philosophy."],
+nietzsche:["Nietzsche","1844–1900",535,330,"On the Genealogy of Morality (1887)","Challenges inherited moral and religious values."],
+heidegger:["Heidegger","1889–1976",620,295,"Being and Time (1927)","Analyses human existence, including the call of conscience."],
+sartre:["Sartre","1905–1980",700,330,"Being and Nothingness (1943)","Develops existentialism around freedom and responsibility."]};
+const EG=[["hobbes","rousseau"],["locke","rousseau"],["rousseau","kant"],["kant","rawls"],["rousseau","rawls"],["locke","nozick"],["rawls","nozick"],["frege","wittgenstein"],["frege","carnap"],["carnap","quine"],["quine","davidson"],["pascal","kierkegaard"],["kierkegaard","heidegger"],["kierkegaard","sartre"],["nietzsche","heidegger"],["heidegger","sartre"]];
+function atlas(sel){$("#ag").innerHTML=EG.map(([a,b])=>{const A=G[a],B=G[b],on=sel&&(a==sel||b==sel);return `<path d="M${A[2]} ${A[3]}Q${(A[2]+B[2])/2} ${(A[3]+B[3])/2-28} ${B[2]} ${B[3]}" fill="none" stroke="${on?"var(--ac)":"var(--line)"}" stroke-width="${on?2.5:1.5}"/>`}).join("")+Object.entries(G).map(([id,n])=>`<g data-n="${id}" style="cursor:pointer"><circle cx="${n[2]}" cy="${n[3]}" r="${id==sel?9:6}" fill="${id==sel?"var(--ac)":"var(--mut)"}"/><text x="${n[2]}" y="${n[3]+20}" font-size="12" text-anchor="middle" ${id==sel?'font-weight="600"':""}>${n[0]}</text></g>`).join("")}
+function pick(id){const n=G[id],ins=EG.filter(e=>e[1]==id).map(e=>G[e[0]][0]),outs=EG.filter(e=>e[0]==id).map(e=>G[e[1]][0]);
+$("#ad").innerHTML=`<div class="card"><span class="tag">${n[1]}</span><br><b>${n[0]}</b><p>${n[5]}</p><p class="mut">Key work: ${n[4]}${ins.length?`<br>Engaged with: ${ins.join(", ")}`:""}${outs.length?`<br>Taken up by: ${outs.join(", ")}`:""}</p><a href="https://philpapers.org/s/${E(n[0])}" target="_blank" rel="noopener">PhilPapers →</a> · <a href="#" data-q="${n[0]}" data-v="home">Search in Zetesis</a>${n[6]?` · <a href="#" data-v="rousseau">Rousseau hub</a>`:""}</div>`;atlas(id)}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-n]");if(g)pick(g.dataset.n)});
+let A={t:"",n:1,p:[],o:[]};try{A=Object.assign(A,JSON.parse(localStorage.getItem("za")||"{}"))}catch(e){}
+const sa=()=>{try{localStorage.setItem("za",JSON.stringify(A))}catch(e){}};
+const oh=tg=>A.o.map((o,i)=>o.g==tg?`<div class="card" style="margin:8px 0 0 18px;border-style:dashed"><span class="tag">Objection</span><textarea rows="2" data-f="o" data-i="${i}" data-k="x" placeholder="What could be said against this?">${esc(o.x)}</textarea><span class="tag" style="display:block;margin-top:8px">Reply</span><textarea rows="2" data-f="o" data-i="${i}" data-k="r" placeholder="Your response">${esc(o.r)}</textarea><p style="margin:6px 0 0"><button data-ar="${i}">Remove objection</button></p></div>`:"").join("")+`<p style="margin:8px 0 0 18px"><button data-ao="${tg}">+ Objection</button></p>`;
+function sum(){const np=A.p.filter(p=>p.x.trim()).length,ns=A.p.filter(p=>p.x.trim()&&!p.s.trim()).length,no=A.o.filter(o=>o.x.trim()).length,nu=A.o.filter(o=>o.x.trim()&&!o.r.trim()).length;
+$("#asm").innerHTML=[`${np} premise${np==1?"":"s"}`,`${ns} without a source`,`${no} objection${no==1?"":"s"}`,`${nu} unanswered`].map(s=>`<span class="tag" style="margin-right:14px">${s}</span>`).join("")+(A.t.trim()?"":'<p class="note">Add a thesis: the single claim your argument defends.</p>')}
+function arg(){$("#at").value=A.t;$("#ap").innerHTML=A.p.map((p,i)=>`<div class="card" style="margin-top:12px"><span class="tag">Premise ${i+1}</span><textarea rows="2" data-f="p" data-i="${i}" data-k="x" placeholder="State the premise as a claim">${esc(p.x)}</textarea><div class="sf" style="margin:8px 0 0"><input data-f="p" data-i="${i}" data-k="s" list="sl" value="${esc(p.s)}" placeholder="Supporting source"><input data-f="p" data-i="${i}" data-k="g" value="${esc(p.g)}" placeholder="Page" style="max-width:90px"></div><p style="margin:8px 0 0"><button data-am="${i},-1">↑</button><button data-am="${i},1">↓</button><button data-ad="${i}">Remove</button></p>${oh(p.id)}</div>`).join("");$("#ao").innerHTML=oh("T");sum()}
+function outline(){const L=[],ob=g=>A.o.filter(o=>o.g==g&&o.x.trim()).forEach(o=>{L.push("   Objection: "+o.x);L.push("   Reply: "+(o.r.trim()||"[no reply yet]"))});A.p.forEach((p,i)=>{L.push(`P${i+1}. ${p.x}${p.s?` (${p.s}${p.g?", p. "+p.g:""})`:""}`);ob(p.id)});L.push("Therefore: "+A.t);ob("T");return L.join("\n")}
+function skel(){return ["1. Introduction: state the question and your thesis: "+(A.t||"[thesis]"),...A.p.map((p,i)=>`${i+2}. Argue premise ${i+1}: ${p.x||"[premise]"}`),`${A.p.length+2}. Objections and replies`+A.o.filter(o=>o.x.trim()).map(o=>`\n   - ${o.x} -> ${o.r||"[reply needed]"}`).join(""),`${A.p.length+3}. Conclusion: restate the thesis and what follows`].join("\n")}
+document.addEventListener("input",e=>{const f=e.target.dataset;if(e.target.id=="at"){A.t=e.target.value;sa();sum();return}if(f.f){const a=A[f.f=="p"?"p":"o"][f.i];if(a){a[f.k]=e.target.value;sa();sum()}}});
+document.addEventListener("click",e=>{if(e.target.closest('[data-v="arg"]'))notes();const b=e.target.closest("button");if(!b)return;const d=b.dataset,cp=t=>navigator.clipboard&&navigator.clipboard.writeText(t);
+if(b.id=="aap"){A.p.push({id:A.n++,x:"",s:"",g:""});sa();arg()}
+if(d.ao!==undefined){A.o.push({g:d.ao=="T"?"T":+d.ao,x:"",r:""});sa();arg()}
+if(d.ar!==undefined){A.o.splice(d.ar,1);sa();arg()}
+if(d.ad!==undefined){const p=A.p.splice(d.ad,1)[0];A.o=A.o.filter(o=>o.g!=p.id);sa();arg()}
+if(d.am!==undefined){const [i,s]=d.am.split(",").map(Number),j=i+s;if(A.p[j]){[A.p[i],A.p[j]]=[A.p[j],A.p[i]];sa();arg()}}
+if(b.id=="aco")cp(outline());if(b.id=="ask")cp(skel());
+if(b.id=="acl"&&confirm("Clear the whole argument?")){A={t:"",n:1,p:[],o:[]};sa();arg()}});
+let U=null,last="";
+const api=async(p,m,b)=>{const r=await fetch("/api/"+p,{method:m||"POST",headers:{"content-type":"application/json"},body:b?JSON.stringify(b):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error((j&&j.error)||"Request failed");return j};
+function ui(){$("#am").textContent=U?"Signed in as "+U+". Your data syncs automatically.":"Sign in to sync your reading list, notes and arguments across devices.";$("#af").style.display=U?"none":"block";$("#alo").style.display=U?"inline-block":"none"}
+async function start(n){U=n;ui();let d=null;try{d=await api("data","GET")}catch(e){}
+if(d&&d.L){try{localStorage.setItem("zbak",JSON.stringify({L,N,A}))}catch(e){}L=d.L;N=d.N||[];A=Object.assign({t:"",n:1,p:[],o:[]},d.A||{});save();sn();sa();list();notes();arg();last=JSON.stringify({L,N,A})}else last=""}
+async function auth(p){try{const r=await api(p,"POST",{username:$("#au").value,password:$("#aw").value});$("#aw").value="";await start(r.name)}catch(e){$("#am").textContent=e.message}}
+$("#ali").onclick=()=>auth("login");$("#asu").onclick=()=>auth("signup");
+$("#alo").onclick=async()=>{try{await api("logout")}catch(e){}U=null;ui()};
+$("#aa").onclick=()=>{$("#ax").value=outline()};
+$("#ar").onclick=async()=>{const o=$("#aout");o.style.display="block";if(!U){o.textContent="Sign in first (Account tab).";return}o.textContent="Thinking…";try{const r=await api("ai","POST",{task:$("#ak2").value,text:$("#ax").value});o.textContent=r.text}catch(e){o.textContent=e.message}};
+setInterval(async()=>{if(!U)return;const s=JSON.stringify({L,N,A});if(s!=last){try{await api("data","PUT",{L,N,A});last=s}catch(e){}}},4000);
+api("me","GET").then(r=>r.name&&start(r.name)).catch(()=>{});
+save();list();notes();cite();atlas();arg();ui();
+</script></body></html>
