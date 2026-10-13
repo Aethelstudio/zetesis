@@ -10,7 +10,7 @@ run_worker_first = ["/api/*"]
 [[d1_databases]]
 binding = "DB"
 database_name = "zetesis"
-database_id = "PASTE_YOUR_D1_ID_HERE"
+database_id = "38e6436e-d9b4-4207-bad2-880e929196fa"
 
 [vars]
 DAILY = "20"
