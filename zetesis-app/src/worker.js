@@ -8,7 +8,7 @@ const cookie=(t,age)=>`zs=${t}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-A
 const tok=req=>(/(?:^|; )zs=([a-f0-9]+)/.exec(req.headers.get("cookie")||"")||[])[1];
 async function who(req,env){const t=tok(req);if(!t)return null;return env.DB.prepare("SELECT u.id,u.name FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.exp>?").bind(await sha(t),Date.now()).first()}
 
-const SYS="You assist a university philosophy student. Work ONLY from the text the student provides. Never invent quotations, page numbers, citations, or bibliographic details; if asked for references, say the student must find them in a library database. You may name thinkers and their general positions, but label that as general knowledge to verify. Be concise and plain.";
+const SYS="You assist a university philosophy student. Work ONLY from the text the student provides. Never invent quotations, page numbers, citations, or bibliographic details; if asked for references, say the student must find them in a library database. You may name thinkers and their general positions, but label that as general knowledge to verify. Be concise and plain. Keep answers under 250 words.";
 const TASKS={
 explain:"Explain the passage below in plain academic English, step by step. Say what remains unclear or contested.",
 objections:"Suggest three serious objections to the argument below, and say what a good reply would need to show.",
@@ -35,10 +35,11 @@ if(p=="data"&&req.method=="GET"){const r=await env.DB.prepare("SELECT json FROM 
 if(p=="data"){const s=JSON.stringify(b);if(s.length>5e5)return J({error:"Data too large."},413);
  await env.DB.prepare("INSERT INTO data(user_id,json,upd) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET json=excluded.json,upd=excluded.upd").bind(me.id,s,Date.now()).run();return J({ok:1})}
 if(p=="ai"){
- const text=String(b.text||"").slice(0,8000),task=TASKS[b.task];if(!task||!text.trim())return J({error:"Choose a task and add some text."},400);
+ const text=String(b.text||"").slice(0,6000),task=TASKS[b.task];if(!task||!text.trim())return J({error:"Choose a task and add some text."},400);
  const day=new Date().toISOString().slice(0,10),c=await env.DB.prepare("INSERT INTO usage(user_id,day,n) VALUES(?,?,1) ON CONFLICT(user_id,day) DO UPDATE SET n=n+1 RETURNING n").bind(me.id,day).first();
- if(c.n>Number(env.DAILY||20))return J({error:"Daily assistant limit reached. Try again tomorrow."},429);
- const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"x-api-key":env.ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","content-type":"application/json"},body:JSON.stringify({model:env.MODEL||"claude-sonnet-5-5",max_tokens:1000,system:SYS,messages:[{role:"user",content:task+"\n\n---\n"+text}]})});
- if(!r.ok)return J({error:"The assistant is unavailable right now."},502);
- const d=await r.json();return J({text:(d.content||[]).map(x=>x.text||"").join("")})}
+ if(c.n>Number(env.DAILY||5))return J({error:"Daily assistant limit reached. Try again tomorrow."},429);
+ try{const r=await env.AI.run(env.MODEL||"@cf/meta/llama-3.1-8b-instruct",{messages:[{role:"system",content:SYS},{role:"user",content:task+"\n\n---\n"+text}],max_tokens:700});
+  const t=typeof r=="string"?r:(r&&(r.response||(r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)))||"";
+  return t?J({text:t}):J({error:"The assistant returned nothing. Try again."},502)}
+ catch(e){return J({error:"The assistant is unavailable right now. Its free daily allowance may be used up."},503)}}
 return J({error:"Not found."},404)}};
