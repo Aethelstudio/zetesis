@@ -12,5 +12,8 @@ binding = "DB"
 database_name = "zetesis"
 database_id = "38e6436e-d9b4-4207-bad2-880e929196fa"
 
+[ai]
+binding = "AI"
+
 [vars]
 DAILY = "20"
