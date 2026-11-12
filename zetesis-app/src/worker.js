@@ -2,7 +2,7 @@ const J=(o,s=200,h={})=>new Response(JSON.stringify(o),{status:s,headers:{"conte
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
 const rnd=n=>hex(crypto.getRandomValues(new Uint8Array(n)));
 const enc=s=>new TextEncoder().encode(s);
-async function hash(pw,salt){const k=await crypto.subtle.importKey("raw",enc(pw),"PBKDF2",false,["deriveBits"]);return hex(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:enc(salt),iterations:100000},k,256))}
+async function hash(pw,salt){const k=await crypto.subtle.importKey("raw",enc(pw),"PBKDF2",false,["deriveBits"]);return hex(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:enc(salt),iterations:10000},k,256))}
 const sha=async s=>hex(await crypto.subtle.digest("SHA-256",enc(s)));
 const cookie=(t,age)=>`zs=${t}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${age}`;
 const tok=req=>(/(?:^|; )zs=([a-f0-9]+)/.exec(req.headers.get("cookie")||"")||[])[1];
