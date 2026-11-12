@@ -17,3 +17,4 @@ binding = "AI"
 
 [vars]
 DAILY = "50"
+MODEL = "@cf/zai-org/glm-4.7-flash"
