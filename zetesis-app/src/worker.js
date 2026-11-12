@@ -2,7 +2,7 @@ const J=(o,s=200,h={})=>new Response(JSON.stringify(o),{status:s,headers:{"conte
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
 const rnd=n=>hex(crypto.getRandomValues(new Uint8Array(n)));
 const enc=s=>new TextEncoder().encode(s);
-async function hash(pw,salt){const k=await crypto.subtle.importKey("raw",enc(pw),"PBKDF2",false,["deriveBits"]);return hex(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:enc(salt),iterations:10000},k,256))}
+async function hash(pw,salt){const k=await crypto.subtle.importKey("raw",enc(pw),"PBKDF2",false,["deriveBits"]);return hex(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:enc(salt),iterations:100000},k,256))}
 const sha=async s=>hex(await crypto.subtle.digest("SHA-256",enc(s)));
 const cookie=(t,age)=>`zs=${t}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${age}`;
 const tok=req=>(/(?:^|; )zs=([a-f0-9]+)/.exec(req.headers.get("cookie")||"")||[])[1];
@@ -38,8 +38,9 @@ if(p=="ai"){
  const text=String(b.text||"").slice(0,6000),task=TASKS[b.task];if(!task||!text.trim())return J({error:"Choose a task and add some text."},400);
  const day=new Date().toISOString().slice(0,10),c=await env.DB.prepare("INSERT INTO usage(user_id,day,n) VALUES(?,?,1) ON CONFLICT(user_id,day) DO UPDATE SET n=n+1 RETURNING n").bind(me.id,day).first();
  if(c.n>Number(env.DAILY||5))return J({error:"Daily assistant limit reached. Try again tomorrow."},429);
- try{const r=await env.AI.run(env.MODEL||"@cf/meta/llama-3.1-8b-instruct",{messages:[{role:"system",content:SYS},{role:"user",content:task+"\n\n---\n"+text}],max_tokens:700});
-  const t=typeof r=="string"?r:(r&&(r.response||(r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)))||"";
-  return t?J({text:t}):J({error:"The assistant returned nothing. Try again."},502)}
- catch(e){return J({error:"The assistant is unavailable right now. Its free daily allowance may be used up."},503)}}
+ try{const r=await env.AI.run(env.MODEL||"@cf/zai-org/glm-4.7-flash",{messages:[{role:"system",content:SYS},{role:"user",content:task+"\n\n---\n"+text}],max_completion_tokens:3000});
+  const ch=r&&r.choices&&r.choices[0],t=typeof r=="string"?r:(r&&r.response)||(ch&&ch.message&&ch.message.content)||"";
+  if(t)return J({text:t});
+  return J({error:"No answer came back (finish reason: "+(ch&&ch.finish_reason||"unknown")+"). Try again or use a shorter text."},502)}
+ catch(e){return J({error:"Assistant error: "+String(e&&e.message||e).slice(0,200)},503)}}
 return J({error:"Not found."},404)}};
